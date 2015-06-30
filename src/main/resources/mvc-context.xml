@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans:beans xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:beans="http://www.springframework.org/schema/beans"  
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc
+                    http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+                http://www.springframework.org/schema/aop  
+                http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+                 http://www.springframework.org/schema/beans 
+                 http://www.springframework.org/schema/beans/spring-beans.xsd  
+                 http://www.springframework.org/schema/context
+                 http://www.springframework.org/schema/context/spring-context.xsd">  
+    <!-- 加载Spring的全局配置文件 -->  
+   <!--   <beans:import resource="serviceContext.xml" />  -->
+    <!-- 加载Spring的全局配置文件 -->  
+    <context:annotation-config />      
+    <!-- SpringMVC配置 -->  
+     <mvc:annotation-driven/>
+       
+    <mvc:default-servlet-handler/>
+    <!-- 
+    <mvc:resources location="/" mapping="/*.html"/>
+     -->
+    <!-- 通过component-scan 让Spring扫描org.swinglife.controller下的所有的类，让Spring的代码注解生效 -->  
+    <context:component-scan base-package="com.supersilver.service" />
+	<context:component-scan base-package="com.supersilver.dao" />
+	<context:component-scan base-package="com.supersilver.controller" /> 
+	
+    <!-- 配置SpringMVC的视图渲染器， 让其前缀为:/ 后缀为.jsp  将视图渲染到/page/<method返回值>.jsp中 -->  
+  
+  
+</beans:beans>    

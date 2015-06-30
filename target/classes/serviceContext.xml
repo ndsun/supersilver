@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">  
+            
+        <!-- datasource 事务-->
+    
+   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+      <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
+   </bean>
+    
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<constructor-arg ref="dataSource"/>
+    </bean>
+     
+    
+    <tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- 扫描该包下的所有类 -->
+	<context:component-scan base-package="com.supersilver.service" />
+	<context:component-scan base-package="com.supersilver.dao" />
+	<context:component-scan base-package="com.supersilver.controller" />
+	
+	 <!-- 读取JDBC配置文件 -->
+    
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"          
+        destroy-method="close">
+        <property name="driverClass">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:mysql://101.200.235.57:3306/supersilver</value>
+        </property>
+        <property name="user">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>123456</value>
+        </property>
+        <property name="maxIdleTime">
+            <value>25000</value>
+        </property>
+        <property name="testConnectionOnCheckin">
+            <value>true</value>
+        </property>
+        <property name="automaticTestTable">
+            <value>c3p0TestTable</value>
+        </property>
+        <property name="idleConnectionTestPeriod">
+            <value>18000</value>
+        </property>
+         <property name="maxStatements">
+                     <value>100</value>
+         </property>  
+    </bean>
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:ibatis/**/*.xml" />
+	</bean>
+	
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+      <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+      <property name="basePackage" value="com.supersilver.dao" />
+    </bean>
+	
+</beans>
